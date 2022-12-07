@@ -1,0 +1,32 @@
+{% include "base.html" %}
+{% include "navigation.html" %}
+{% block content %}
+
+{% ifequal error "no" %}
+<script>
+    alert('logged in successfully');
+    window.location = "{% url 'dashboard' %}";
+</script>
+{% endifequal %}
+
+{% ifequal error "yes" %}
+<script>
+    alert('Invalid Login...try again!');
+</script>
+{% endifequal %}
+
+<div class="container">
+    <h2 class="text-center">Admin Login</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <label>Admin Name</label>
+        <input type="text" class="form-control" name="uname">
+        <label>Password</label>
+        <input type="text" class="form-control" name="pwd">
+
+        <input type="submit" value="Login" class="form-control btn btn-primary">
+    </form>
+</div>
+
+{% endblock content %}
+{% include "footer.html" %}

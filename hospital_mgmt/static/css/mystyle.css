@@ -1,0 +1,19 @@
+#home{
+    color: aqua;
+}
+
+
+.background-1{
+    color: whitesmoke;
+    
+}
+
+.with-eight {
+    text-shadow: 0.05em 0 black, 0 0.05em black, -0.05em 0 black, 0 -0.05em black, -0.05em -0.05em black, -0.05em 0.05em black, 0.05em -0.05em black, 0.05em 0.05em black;
+  }
+
+
+  hr.rounded{
+    border-top: 10px solid lightskyblue;
+    border-radius: 5px;
+  }
