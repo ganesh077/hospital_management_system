@@ -1,0 +1,96 @@
+{% include "base.html" %} {% include "navigation.html" %} {% load static %}
+{% if error == "no" %}
+<script>
+    alert('Registration successfull!');
+     $(document).ready(function() {
+        $(location).attr('href','/');
+     });
+</script>
+{% endif %}
+
+{% if error == "yes" %}
+<script>
+    alert('Something went wrong, try again!');
+</script>
+{% endif %}
+<style>
+  .mydivstyle:hover {
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
+    transform: translateY(-20px);
+  }
+
+  hr.rounded {
+    border-top: 10px solid lightblue;
+    border-radius: 5px;
+  }
+  #c2 {
+    background: #4C75A3;
+    width: 25%;
+    height: 100vh;
+    float: right;
+  }
+
+  #c1 {
+    background: black;
+    float: left;
+    height: 100vh;
+    width: 75%;
+  }
+
+  #center {
+    margin: auto;
+    width: 80%;
+    padding: 60% 0;
+  }
+</style>
+{% block content %}
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+  <div id="c1">
+
+      <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="https://source.unsplash.com/1600x1100/?Health" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="https://source.unsplash.com/1600x1100/?Medicines,health" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="https://source.unsplash.com/1600x1100/?Medical,Hospital" class="d-block w-100" alt="...">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="c2">
+    <div id="center">
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Email address</label> <!-- Form that collects register info -->
+          <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          <div id="emailHelp" class="form-label">We'll never share your email with anyone else.</div>
+        </div>
+        <div class="mb-3">
+          <label for="username" class="form-label">username</label>
+          <input type="text" class="form-control" name="username" id="exampleInputPassword1">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+        </div>
+        <button type="submit" name="register" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+
+{% endblock content %} 

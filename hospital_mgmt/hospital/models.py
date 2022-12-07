@@ -13,7 +13,21 @@ class Patient(models.Model):
     address = models.TextField()
 
 class Appointment(models.Model):
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    doctor = models.CharField(max_length=55)
+    patient = models.CharField(max_length=55)
     date = models.DateField()
     time = models.TimeField() 
+
+class Users (models.Model):
+    email = models.CharField(max_length=55)
+    uname = models.CharField(max_length=55)
+    password = models.CharField(max_length=256)
+    role = models.IntegerField(default = 1)
+
+class Appointments(models.Model):
+    doctor = models.CharField(max_length=55)
+    patient = models.CharField(max_length=55)
+    date = models.DateField()
+    time = models.TimeField() 
+
+

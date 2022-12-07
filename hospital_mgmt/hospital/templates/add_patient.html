@@ -3,18 +3,18 @@
 {% block content %}
 
 
-{% ifequal error "no" %}
+{% if error == "no" %}
 <script>
     alert('Record saved successfully');
     window.location = "{% url 'view_patient' %}";
 </script>
-{% endifequal %}
+{% endif %}
 
-{% ifequal error "yes" %}
+{% if error == "yes" %}
 <script>
     alert('Something went wrong!');
 </script>
-{% endifequal %}
+{% endi %}
 
 <div class="container">
     <h2 class="text-center">Add Patient</h2>
