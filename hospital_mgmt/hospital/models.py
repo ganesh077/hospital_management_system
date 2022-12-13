@@ -22,7 +22,7 @@ class Users (models.Model):
     email = models.CharField(max_length=55)
     uname = models.CharField(max_length=55)
     password = models.CharField(max_length=256)
-    role = models.IntegerField(default = 1)
+    role = models.IntegerField(default = 0)
 
 class Appointments(models.Model):
     doctor = models.CharField(max_length=55)

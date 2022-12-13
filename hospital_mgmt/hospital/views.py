@@ -2,9 +2,12 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from .models import Doctor, Patient, Appointment, Appointments
-from .bruh.loginverif import confirmreg, confirmlog
-from .bruh.appointmentc import add_appointment, fetch_appointment
+
+from hospital.bruh.doctorc import adddoctor, fetchdoctors
+from hospital.bruh.usersc import listusers
+from .models import Doctor, Patient, Appointment, Appointments, Users
+from .bruh.loginverif import confirmreg, confirmlog, userprofile
+from .bruh.appointmentc import add_appointment, fetch_appointment, fetchallappointment
 
 # Create your views here.
 
@@ -120,11 +123,22 @@ def Logout_admin(request):
 
 
 def View_doctor(request):
-    if not request.user.is_staff:
-        return redirect('login')
-    doc = Doctor.objects.all()
-    d = {'doc': doc}
-    return render(request, 'view_doctor.html', d)
+    doc = None
+    if request.method == "GET":
+        context = {
+            "login": False
+        }
+        user = None
+        if 'login' in request.COOKIES:
+            doc = fetchdoctors(request.COOKIES['user_role'])
+            context = {
+                "login": True,
+                "role": request.COOKIES['user_role'],
+                "user": request.COOKIES['username'],
+                "doc": doc
+            }
+            response = render(request, 'view_doctor.html', context)
+            return response
 
 
 def register(request):
@@ -144,46 +158,77 @@ def register(request):
 
 
 def Delete_doctor(request, pid):
-    if not request.user.is_staff:
-        return redirect('login')
-    doctor = Doctor.objects.get(id=pid)
-    doctor.delete()
-    return redirect('view_doctor')
+
+    if 'login' in request.COOKIES:
+        if request.COOKIES['user_role'] == "1":
+
+            doctor = Doctor.objects.get(id=pid)
+            doctor.delete()
+            return redirect('view_doctor')
 
 
 def Add_doctor(request):
-    error = ""
-    if not request.user.is_staff:
-        return redirect('login')
-    if request.method == "POST":
-        n = request.POST['name']
-        m = request.POST['mobile']
-        sp = request.POST['special']
-
-        try:
-            Doctor.objects.create(Name=n, mobile=m, special=sp)
-            error = "no"
-        except:
-            error = "yes"
-    d = {'error': error}
-
-    return render(request, 'add_doctor.html', d)
+    context = None
+    if request.COOKIES['user_role'] == '1':
+        doc = None
+        if request.method == "POST":
+            context = {
+                "login": False
+            }
+            user = None
+            if 'login' in request.COOKIES:
+                name = request.POST['name']
+                mobile = request.POST['mobile']
+                special = request.POST['special']
+                doc = adddoctor(
+                    request.COOKIES['user_role'], name, mobile, special)
+                context = {
+                    "login": True,
+                    "role": request.COOKIES['user_role'],
+                    "user": request.COOKIES['username'],
+                    "error": 0
+                }
+                response = render(request, 'add_doctor.html', context)
+                return response
+        response = render(request, 'add_doctor.html', context)
+        return response
+    else:
+        response = render(request, 'add_doctor.html')
+        return response
 
 
 def View_patient(request):
-    if not request.user.is_staff:
-        return redirect('login')
-    doc = Patient.objects.all()
-    d = {'doc': doc}
-    return render(request, 'view_patient.html', d)
+    if request.COOKIES['user_role'] == '1':
+        users = None
+        if request.method == "GET":
+            context = {
+                "login": False
+            }
+            if 'login' in request.COOKIES:
+
+                users = listusers(request.COOKIES['user_role'])
+                context = {
+                    "login": True,
+                    "role": request.COOKIES['user_role'],
+                    "user": request.COOKIES['username'],
+                    "user": users
+                }
+                print(users)
+                response = render(request, 'listusers.html', context)
+                return response
+    else:
+        print("inside else")
+        response = render(request, 'listusers.html')
+        return response
 
 
 def Delete_patient(request, pid):
-    if not request.user.is_staff:
-        return redirect('login')
-    patient = Patient.objects.get(id=pid)
-    patient.delete()
-    return redirect('view_patient')
+    if 'login' in request.COOKIES:
+        if request.COOKIES['user_role'] == "1":
+
+            patient = Users.objects.get(id=pid)
+            patient.delete()
+            return redirect('view_patient')
 
 
 def Add_patient(request):
@@ -215,6 +260,14 @@ def Add_appointment(request):
             "role": request.COOKIES['user_role'],
             "user": request.COOKIES['username']
         }
+        if request.method == "GET":
+            doc = fetchdoctors()
+            context = {
+                "login": True,
+                "role": request.COOKIES['user_role'],
+                "user": request.COOKIES['username'],
+                "doc": doc
+            }
 
         if request.method == "POST":
             u = request.COOKIES['username']
@@ -250,7 +303,10 @@ def View_appointment(request):
         if request.method == "GET":
             u = request.COOKIES['username']
             r = request.COOKIES['user_role']
-            state = fetch_appointment(u, r)
+            if r == '1':
+                state = fetchallappointment(u, r)
+            else:
+                state = fetch_appointment(u, r)
             context = {
                 "login": True,
                 "role": request.COOKIES['user_role'],
@@ -283,6 +339,7 @@ def User_profile(request):
     context = {
         "login": False
     }
+    user = None
     if 'login' in request.COOKIES:
         context = {
             "login": True,
@@ -293,10 +350,20 @@ def User_profile(request):
         if request.method == "GET":
             u = request.COOKIES['username']
             r = request.COOKIES['user_role']
+            user = userprofile(u)
+            state = fetch_appointment(u, r)
+            count = 0
+            for i in state:
+                count += 1
+
+            print(user)
             context = {
                 "login": True,
                 "role": request.COOKIES['user_role'],
                 "user": request.COOKIES['username'],
+                "email": user.email,
+                "uname": user.uname,
+                "appoints": count
             }
             response = render(request, 'profile.html', context)
             return response

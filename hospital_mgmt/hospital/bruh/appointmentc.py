@@ -9,7 +9,13 @@ def add_appointment(user, date, time, doctor):
 
 def fetch_appointment(username = None, role = None):
     apt = Appointments.objects.filter(patient=username)
-    print(apt[0].patient)
+    if apt != "":
+        return apt
+    else:
+        return False
+
+def fetchallappointment(username = None, role = None):
+    apt = Appointments.objects.all()
     if apt != "":
         return apt
     else:

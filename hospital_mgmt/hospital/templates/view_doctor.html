@@ -1,31 +1,47 @@
-{% include "base.html" %}
-{% include "navigation.html" %}
+{% include "base.html" %} {% include "navigation.html" %}
 <div class="container">
-<div>
+  <div>
     <h2>View Doctor</h2>
     <table id="tbl" class="table table-hover">
-        <thead>
-            <tr>
-                <th>DoctorID</th>
-                <th>Name</th>
-                <th>Mobile</th>
-                <th>Special</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-    <tbody>
+      <thead>
+        <tr>
+          <th>DoctorID</th>
+          <th>Name</th>
+          <th>Mobile</th>
+          <th>Special</th>
+          {% if role == "1" %}
+          <th>Delete</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
         {% for i in doc %}
         <tr>
-            <td>{{i.id}}</td>
-            <td>{{i.Name}}</td>
-            <td>{{i.mobile}}</td>
-            <td>{{i.special}}</td>
-            <td><a href="{% url 'delete_doctor' i.id %}" 
-            onclick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
+          <td>{{i.id}}</td>
+          <td>{{i.Name}}</td>
+          <td>{{i.mobile}}</td>
+          <td>{{i.special}}</td>
+          {% if role == "1" %}
+          <td>
+            <a
+              href="{% url 'delete_doctor' i.id %}"
+              onclick="return confirm('Are you sure?')"
+              class="btn btn-danger"
+              >Delete</a
+            >
+          </td>
+          {% endif %}
         </tr>
         {% endfor %}
-    </tbody>
-    </table>  
-</div>
+      </tbody>
+    </table>
+    <button
+      type="button"
+      class="btn btn-dark"
+      onclick="window.location = '/add_doctor';"
+    >
+      Add another doctor
+    </button>
+  </div>
 </div>
 {% include "footer.html" %}

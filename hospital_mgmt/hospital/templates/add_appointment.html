@@ -11,8 +11,7 @@
         {% csrf_token %}
         <label>Doctor Name</label>
         <select name="doctor" class="form-control">
-        <option value="test">test</option>
-        {% for i in doctor %}
+        {% for i in doc %}
         <option value="{{i.Name}}">{{i.Name}}</option>
         {% endfor %}
         </select>

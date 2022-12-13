@@ -20,3 +20,14 @@ def confirmlog(user, password):
     except:
         uname, login, role = "", False, 9
         return uname, login, role
+
+
+def userprofile(user):
+    try:
+        user = Users.objects.get(uname=user)
+        
+        return user
+
+    except:
+        return ""
+

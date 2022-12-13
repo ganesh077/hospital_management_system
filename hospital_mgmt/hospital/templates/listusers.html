@@ -1,0 +1,38 @@
+{% include "base.html" %} {% include "navigation.html" %}{% block content %}
+
+<div>
+  <h2 class="text-center">Manage Appointments</h2>
+  <div class="container">
+    <table id="example" class="table table-hover">
+      <thead>
+        <tr>
+          <th>User id</th>
+          <th>Username</th>
+          <th>email</th>
+          <th>User type</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in user %}
+        <tr>
+          <td>{{i.id}}</td>
+          <td>{{i.uname}}</td>
+          <td>{{i.email}}</td>
+          <td>{{i.role}}</td>
+          <td>
+            <a
+              href="{% url 'delete_patient' i.id %}"
+              onclick="return confirm('Are you sure?')"
+              class="btn btn-danger"
+              >Disable</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock content %} {% include "footer.html" %}
