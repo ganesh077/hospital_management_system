@@ -212,7 +212,7 @@ def View_patient(request):
                     "login": True,
                     "role": request.COOKIES['user_role'],
                     "user": request.COOKIES['username'],
-                    "user": users
+                    "user_no": users
                 }
                 print(users)
                 response = render(request, 'listusers.html', context)
