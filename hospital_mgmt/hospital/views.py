@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-
+from django.contrib.auth.hashers import make_password, check_password
 from hospital.bruh.doctorc import adddoctor, fetchdoctors
 from hospital.bruh.usersc import listusers
 from .models import Doctor, Patient, Appointment, Appointments, Users
@@ -95,6 +95,7 @@ def Login(request):
     if request.method == "POST":
         u = request.POST['username']
         p = request.POST['password']
+        
         uname, login, role = confirmlog(u, p)
         if login == True:
             context = {
@@ -146,7 +147,7 @@ def register(request):
     if request.method == "POST":
         email = request.POST['email']
         uname = request.POST['username']
-        password = request.POST['password']
+        password = make_password(request.POST['password'])
         flag = confirmreg(uname, email, password)
         if flag == True:
             error = "yes"

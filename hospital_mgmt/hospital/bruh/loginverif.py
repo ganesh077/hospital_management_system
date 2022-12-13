@@ -1,4 +1,5 @@
 from hospital.models import Users
+from django.contrib.auth.hashers import make_password, check_password
 
 
 def confirmreg(user, email, password):
@@ -11,13 +12,20 @@ def confirmreg(user, email, password):
 
 
 def confirmlog(user, password):
-
     try:
-        user = Users.objects.get(uname=user, password=password)
-        uname, login, role = user.uname, True, user.role
+        p = make_password(password)
+        user = Users.objects.get(uname=user)
+        checkpassword = check_password(password, user.password)
+        print(checkpassword)
+        if checkpassword:
+            uname, login, role = user.uname, True, user.role
+        else:
+            uname, login, role = "", False, 9
+        
         return uname, login, role
 
-    except:
+    except Exception as e:
+        print(str(e))
         uname, login, role = "", False, 9
         return uname, login, role
 
@@ -25,9 +33,8 @@ def confirmlog(user, password):
 def userprofile(user):
     try:
         user = Users.objects.get(uname=user)
-        
+
         return user
 
     except:
         return ""
-
